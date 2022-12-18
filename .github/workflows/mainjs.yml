@@ -1,6 +1,6 @@
 on: [workflow_dispatch]
 
-name: Hello world js workflow
+name: Hello js workflow
 
 jobs:
   hello_world_job:
