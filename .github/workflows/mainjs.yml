@@ -3,19 +3,27 @@ on: [workflow_dispatch]
 name: Hello js workflow
 
 jobs:
-  hello_world_job:
+  # unit tests
+  unit:
     runs-on: ubuntu-latest
-    name: A job to say hello
     steps:
-      # To use this repository's private action,
+    - uses: actions/checkout@v3
+    - run: cd javascript-action && npm ci
+    - run: cd javascript-action && npm test
+
+  # test action works running from the graph
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - run: npm ci
+    # To use this repository's private action,
       # you must check out the repository
-      - name: Checkout
-        uses: actions/checkout@v3
-      - name: Hello world action step
-        uses: ./javascript-action # Uses an action in the directory
-        id: hello
-        with:
-          who-to-greet: 'Pepe'
-      # Use the output from the `hello` step
-      - name: Get the output time
-        run: echo "The time was ${{ steps.hello.outputs.time }}"
+    - name: Hello world action step
+      uses: ./javascript-action # Uses an action in the directory
+      id: hello
+      with:
+        who-to-greet: 'Pepe'
+    # Use the output from the `hello` step
+    - name: Get the output time
+      run: echo "The time was ${{ steps.hello.outputs.time }}"
